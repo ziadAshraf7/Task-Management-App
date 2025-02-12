@@ -9,9 +9,6 @@ export type CatDocument = HydratedDocument<Task>;
 })
 export class Task {
   
-  @Prop()
-  _id : Types.ObjectId
-
   @Prop({required : true})
   @Length(3 , 30)
   @IsString()
@@ -30,7 +27,7 @@ export class Task {
   @IsDate()
   deadline : Date
 
-  @Prop({type : Types.ObjectId , ref : 'User' , required : true})
+  @Prop({type : Types.ObjectId , ref : 'User' })
   user : User  
 }
 

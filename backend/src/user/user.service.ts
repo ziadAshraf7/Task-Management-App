@@ -6,6 +6,7 @@ import { Model, Types } from 'mongoose';
 import { User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
+import { generateObjectId } from 'src/utills/utills';
 
 export const USER_SERVICE_IMP_TOKEN = "UserServiceImp"
 
@@ -29,7 +30,6 @@ export class UserServiceImp implements UserService {
             ...createUserDto,
             password: hashPassword, 
         })
-       
         try{
           return  await newUser.save()
         }catch(e){
@@ -39,47 +39,41 @@ export class UserServiceImp implements UserService {
     }
 
     async delete(userId: string): Promise<void> {
-        const userObjectId : Types.ObjectId = this.generateObjectId(userId)
+        const userObjectId : Types.ObjectId = generateObjectId(userId)
         const user = await this.userModel.findById(userObjectId)
         if(user == null) throw new NotFoundException("user does not exists")
         try{
             await this.userModel.findByIdAndDelete(userObjectId)
         }catch(e) {
+            Logger.error(e)
             throw new NotFoundException("user does not exists")
         }
     }
 
     async update(userId : string , updateUserDto: UpdateUserDto): Promise<User | null> {
-        const userObjectId : Types.ObjectId = this.generateObjectId(userId)
+        const userObjectId : Types.ObjectId = generateObjectId(userId)
         const user = await this.userModel.findById(userObjectId)
         if(user == null) throw new NotFoundException("user does not exists")
         try{
             const user = await this.userModel.findByIdAndUpdate(userObjectId , updateUserDto , {new : true})
             return user
         }catch(e) {
+            Logger.error(e)
             throw new NotFoundException("user does not exists")
         }
       
     }
     async findById(userId: string): Promise<User | null> {
-        const userObjectId : Types.ObjectId = this.generateObjectId(userId)
+        const userObjectId : Types.ObjectId = generateObjectId(userId)
         const user = await this.userModel.findById(userObjectId)
-        if(user == null) throw new NotFoundException("user does not exists")
         return user || null
     }
    
     async findByEmail(email: string): Promise<User | null> {
         const user = await this.userModel.findOne({email : email })
-        if(user == null) throw new NotFoundException("user does not exists")
         return user 
     }
     
-    private generateObjectId(id : string) : Types.ObjectId {
-        try{
-            return new Types.ObjectId(id) 
-        }catch(e){
-            throw new BadRequestException("id pattern is not correct")
-        }
-    }
+ 
    
 }

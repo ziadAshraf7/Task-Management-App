@@ -11,4 +11,5 @@ export interface UserService {
     findById(id : string) : Promise<User | null>
     findByEmail(email : string) : Promise<User | null>
     getAll() : Promise<User[]>
+    findByUserName(userName : string) : Promise<User[]>
 }

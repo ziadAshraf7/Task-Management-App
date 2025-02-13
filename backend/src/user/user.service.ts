@@ -15,6 +15,13 @@ export class UserServiceImp implements UserService {
 
 
   constructor(@InjectModel(User.name) private userModel : Model<User>){}
+    
+  
+  async findByUserName(userName : string): Promise<User[]> {
+        const users = await this.userModel.find({name : userName})
+        return users
+    }
+    
    
    async getAll(): Promise<User[]> {
         const users : User[] = await this.userModel.find()

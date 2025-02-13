@@ -35,5 +35,7 @@ export class User {
   userTasksCategories : string[]
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+ const UserSchema = SchemaFactory.createForClass(User);
+ UserSchema.index({ name: 1 });
 
+ export {UserSchema}

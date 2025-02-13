@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from 'src/task/task.schema';
 import { User, UserSchema } from 'src/user/user.schema';
 import { JwtModule } from '@nestjs/jwt';
+import { SharedTask, SharedTaskSchema } from 'src/shared-task/shared-task.schema';
+import { SharedTaskModule } from 'src/shared-task/shared-task.module';
 
 @Module({
   providers: [{
@@ -12,8 +14,12 @@ import { JwtModule } from '@nestjs/jwt';
     useClass : TaskManagementServiceImp
   }],
   controllers: [TaskManagementController],
-  imports : [  JwtModule,
+  imports : [ 
+              JwtModule,
                MongooseModule.forFeature([{name : Task.name , schema : TaskSchema}]) ,
-               MongooseModule.forFeature([{name : User.name , schema : UserSchema}]) ]
+               MongooseModule.forFeature([{name : User.name , schema : UserSchema}]) ,
+               MongooseModule.forFeature([{name : SharedTask.name , schema : SharedTaskSchema}]) ]
 })
 export class TaskManagementModule {}
+
+

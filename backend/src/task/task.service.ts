@@ -13,9 +13,18 @@ export class TaskServiceImp implements TaskService {
 
    constructor(@InjectModel(Task.name) private readonly taskModel : Model<Task> ,
                 ) {}
+    async findCompletedTasks(userId: string) {
+        const tasks = await this.taskModel.find({completed : true , createdUser : generateObjectId(userId)})
+        return tasks
+    }
+    
+    async findByCategory(category: string , userId : string): Promise<Task[]> {
+        const tasks = await this.taskModel.find({category : category , createdUser : generateObjectId(userId)})
+        return tasks
+    }
    
 
-   async delete(id: string ,req ): Promise<void> {
+    async delete(id: string , req ): Promise<void> {
        
         const authenticatedUser = req.user
         if(authenticatedUser == null) throw new BadRequestException("bad request")
@@ -24,7 +33,7 @@ export class TaskServiceImp implements TaskService {
         const taskObjectId = generateObjectId(id)
         const task = await this.findById(id) 
         if(task == null) throw new NotFoundException("task is not found")
-        const userTaskId = task.user 
+        const userTaskId = task.createdUser 
         console.log(userTaskId , "userTaskId")
         if(userTaskId !== authenticatedUser._id) throw new UnauthorizedException("user is not authorized to delete this task")
 
@@ -48,7 +57,7 @@ export class TaskServiceImp implements TaskService {
         const task = await this.findById(id)
         if(task == null) throw new NotFoundException("task is not found")
         
-        const userTaskId = task.user 
+        const userTaskId = task.createdUser 
         console.log(userTaskId , "userTaskId")
         if(userTaskId !== authenticatedUser._id) throw new UnauthorizedException("user is not authorized to update this task")
 
@@ -60,7 +69,7 @@ export class TaskServiceImp implements TaskService {
         }    
     }
    
-   private async findById(id: string): Promise<Task | null> {
+    private async findById(id: string): Promise<Task | null> {
         const taskObjectId = generateObjectId(id)
         const task = await this.taskModel.findById(taskObjectId)
         return task

@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { TaskManagementModule } from './task-management/task-management.module';
 import { AuthModule } from './auth/auth.module';
+import { SharedTaskModule } from './shared-task/shared-task.module';
 import configurations from './config/configurations';
 
 @Module({
@@ -26,6 +27,7 @@ import configurations from './config/configurations';
     UserModule,
     TaskManagementModule,
     AuthModule,
+    SharedTaskModule,
   ],
   controllers: [AppController],
   providers: [AppService],

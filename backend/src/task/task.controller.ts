@@ -5,16 +5,20 @@ import { TASK_SERVICE_IMP_TOKEN } from './task.service';
 import { Task } from './task.schema';
 import UpdatedTaskDto from './dto/updateTask.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { SharedTaskService } from 'src/shared-task/shared-task.service';
 
 @Controller('tasks')
 @UseGuards(AuthGuard)
 export class TaskController {
 
-    constructor(@Inject(TASK_SERVICE_IMP_TOKEN) private readonly taskService: TaskService) {}
+    constructor(@Inject(TASK_SERVICE_IMP_TOKEN) 
+    private readonly taskService: TaskService,
+    private readonly sharedTaskService: SharedTaskService) {}
 
     @Get()
     async getAllTasksByUserId(@Request() req ) : Promise<Task[]> {
-        return this.taskService.findAllByUserId(req.user.userId)
+       return await this.sharedTaskService.getSharedTasksByUserId(req.user.userId);
+        // return this.taskService.findAllByUserId(req.user.userId)
     }
 
     @Delete(":id")
@@ -28,5 +32,8 @@ export class TaskController {
         return await this.taskService.update(taskId , taskDto , req)
     }
 
-    
+    @Get("/category/:categoryName")
+    async findByCategory(@Param("categoryName") category : string , @Request() req) : Promise<Task[]> {
+        return this.taskService.findByCategory(category , req.user.userId)
+    }
 }

@@ -14,4 +14,6 @@ export default class CreateTaskDto {
       @IsString()
       deadline : string
       
+      @IsString()
+      category : string
 }

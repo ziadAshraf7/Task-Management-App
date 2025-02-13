@@ -2,6 +2,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsEmail, IsString, Matches, Min } from 'class-validator';
 import { HydratedDocument, Types } from 'mongoose';
+import { SharedTask } from 'src/shared-task/shared-task.schema';
 import { Task } from 'src/task/task.schema';
 
 export type CatDocument = HydratedDocument<User>;
@@ -29,6 +30,9 @@ export class User {
 
   @Prop({type : [{type : Types.ObjectId , ref : 'Task'}]})
   tasks : Task[]
+
+  @Prop({default : []})
+  userTasksCategories : string[]
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

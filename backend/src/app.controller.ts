@@ -1,13 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-
+import * as puppeteer from 'puppeteer';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return process.env.DATABASE_HOST as string;
+  async getHello()  {
+    return "hello world"
   }
 }

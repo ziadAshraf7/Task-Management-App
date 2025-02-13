@@ -2,6 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsBoolean, IsDate, IsString, Length, Max, Min } from 'class-validator';
 import { HydratedDocument, Types } from 'mongoose';
 import { User } from 'src/user/user.schema';
+import { TaskAssignment } from './dto/taskAssignment';
+import { SharedTask } from 'src/shared-task/shared-task.schema';
 export type CatDocument = HydratedDocument<Task>;
 
 @Schema({
@@ -23,12 +25,19 @@ export class Task {
   @IsBoolean()
   completed : boolean
 
+  @Prop({type : TaskAssignment , default : []})
+  assignments : TaskAssignment[]
+
   @Prop({required : true})
   @IsDate()
   deadline : Date
 
   @Prop({type : Types.ObjectId , ref : 'User' })
-  user : User  
+  createdUser : User  
+
+  @Prop({required : true})
+  @Length(2 , 20)
+  category : string
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);

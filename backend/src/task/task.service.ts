@@ -33,7 +33,8 @@ export class TaskServiceImp implements TaskService {
         if(updatedTaskDto.completed != null && !updatedTaskDto.completed ) {
             throw new BadRequestException("you cannot undo the completed status of the task")
         }
-        await this.findById(id)
+        const task = await this.findById(id)
+        if(task == null) throw new NotFoundException("task is not found")
         try{
             return await this.taskModel.findByIdAndUpdate(taskObjectId , updatedTaskDto , {new : true})
         }catch(e) {
@@ -45,7 +46,6 @@ export class TaskServiceImp implements TaskService {
     async findById(id: string): Promise<Task | null> {
         const taskObjectId = generateObjectId(id)
         const task = await this.taskModel.findById(taskObjectId)
-        if(task == null) throw new NotFoundException("task is not found")
         return task
     }
 

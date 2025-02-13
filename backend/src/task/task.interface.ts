@@ -3,8 +3,7 @@ import { Task } from "./task.schema"
 
 
 export interface TaskService {
-        delete(id : string) : Promise<void>
-        update(id : string , updateUserDto : UpdatedTaskDto) : Promise<Task | null>
-        findById(id : string) : Promise<Task | null>
+        delete(id : string , req : Request) : Promise<void>
+        update(id : string , updateUserDto : UpdatedTaskDto , req : Request) : Promise<Task | null>
         findAllByUserId(userId : string) : Promise<Task[]>
 }

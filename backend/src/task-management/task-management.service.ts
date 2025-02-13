@@ -18,14 +18,13 @@ export class TaskManagementServiceImp implements TaskManagementService {
                       ) {}
     
     
-      async addTask(createTaskDto: CreateTaskDto): Promise<Task | null> {
-                    const userObjectId = generateObjectId(createTaskDto.userId)
+      async addTask(createTaskDto: CreateTaskDto , userId : string): Promise<Task | null> {
+                    const userObjectId = generateObjectId(userId)
     
                     const user = await this.userModel.findById(userObjectId)
                     if(user == null) throw new NotFoundException("user does not exists")
                         
-                    const {userId , ...taskData} = createTaskDto
-                    const newTask = new this.taskModel({...taskData, user: userObjectId }); 
+                    const newTask = new this.taskModel({...createTaskDto, user: userObjectId }); 
                  
                    try{
                      var savedTask =  await newTask.save()

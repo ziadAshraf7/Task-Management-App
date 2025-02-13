@@ -4,6 +4,7 @@ import { TaskManagementController } from './task-management.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Task, TaskSchema } from 'src/task/task.schema';
 import { User, UserSchema } from 'src/user/user.schema';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   providers: [{
@@ -11,7 +12,7 @@ import { User, UserSchema } from 'src/user/user.schema';
     useClass : TaskManagementServiceImp
   }],
   controllers: [TaskManagementController],
-  imports : [ 
+  imports : [  JwtModule,
                MongooseModule.forFeature([{name : Task.name , schema : TaskSchema}]) ,
                MongooseModule.forFeature([{name : User.name , schema : UserSchema}]) ]
 })

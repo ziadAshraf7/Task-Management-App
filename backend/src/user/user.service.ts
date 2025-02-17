@@ -7,6 +7,7 @@ import { User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { generateObjectId } from 'src/utills/utills';
+import { UserResponseDto } from './dto/user.dto';
 
 export const USER_SERVICE_IMP_TOKEN = "UserServiceImp"
 
@@ -17,9 +18,14 @@ export class UserServiceImp implements UserService {
   constructor(@InjectModel(User.name) private userModel : Model<User>){}
     
   
-  async findByUserName(userName : string): Promise<User[]> {
-        const users = await this.userModel.find({name : userName})
-        return users
+  async findByUserName(userName : string): Promise<UserResponseDto[]> {
+        const users  = await this.userModel.find({name : userName})
+        return users.map((user : any  ) => ({
+            email : user.email ,
+            name : user.name , 
+            id : user._id
+        })
+        )
     }
     
    

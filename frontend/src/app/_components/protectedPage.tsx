@@ -13,6 +13,8 @@ function ProtectedPage({
     const user = extractUserData()
     const router =  useRouter()
 
+    console.log(user , "protected")
+
    if(!user || !user.user.id ) router.replace("/")
 
  

@@ -22,23 +22,86 @@ export const apiSlice = createApi({
 }
 }),
 
-  tagTypes: ['Tasks'], // Add a tag for caching
+  tagTypes: ['CreatedTasks' , "SharedTasks" , "AssignedTasks"], 
   endpoints: (builder) => ({
    
-    getTasks: builder.query({
-      query: () => '/tasks',
-      providesTags: ['Tasks'], // This query will be invalidated when the 'Data' tag is invalidated
-    }),
    
+    getSharedTasks: builder.query({
+      query: (query) => ({
+        url :'/shared-tasks',
+        params : query
+      }),
+      providesTags: ['SharedTasks'], 
+    }),
+
+    getAssignedTasks: builder.query({
+      query: (query : any) => ({url :'/shared-tasks/assigned' , params : query}),
+      providesTags: ['AssignedTasks'], 
+    }),
+
+    getCreatedTasks: builder.query({
+      query: (searchParams : {category : string , title : string} | undefined) => ({
+        url: '/tasks',
+        params: searchParams, 
+      }),
+      providesTags: ['CreatedTasks'],
+    }),
+
+    searchUser : builder.query({
+      query: (searchTerm) => `/users/search?userName=${searchTerm}`,
+    }),
+
+    updateTask: builder.mutation({
+      query: (data) => ({
+        url: '/task-management',
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['CreatedTasks'], 
+    }),
+
+    deleteTask: builder.mutation({
+      query: (taskId) => ({
+        url: '/task-management/' + taskId,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['CreatedTasks' , 'AssignedTasks'], 
+    }),
+
     addTask: builder.mutation({
       query: (newData) => ({
         url: '/task-management',
         method: 'POST',
         body: newData,
       }),
-      invalidatesTags: ['Tasks'], // Invalidate the 'Data' tag to refetch the data
+      invalidatesTags: ['CreatedTasks'], 
     }),
 
+    assignTask: builder.mutation({
+      query: (newData) => ({
+        url: '/task-management/assign',
+        method: 'POST',
+        body: newData,
+      }),
+      invalidatesTags: ['AssignedTasks'], 
+    }),
+
+    unAssignTask: builder.mutation({
+      query: (newData) => ({
+        url: '/task-management/unAssign',
+        method: 'POST',
+        body: newData,
+      }),
+      invalidatesTags: ['AssignedTasks'], 
+    }),
+
+    register: builder.mutation({
+      query: (newData) => ({
+        url: '/users',
+        method: 'POST',
+        body: newData,
+      }),
+    }),
     login : builder.mutation({
         query : (loginData) => ({
             url : "auth/login" ,
@@ -57,4 +120,16 @@ export const apiSlice = createApi({
   }),
 });
 
-export const { useLoginMutation , useGetTasksQuery, useAddTaskMutation } = apiSlice;
+export const {
+  useGetSharedTasksQuery ,  
+  useLoginMutation , 
+  useGetCreatedTasksQuery, 
+  useAddTaskMutation ,
+  useGetAssignedTasksQuery ,
+  useSearchUserQuery ,
+  useAssignTaskMutation ,
+  useRegisterMutation ,
+  useUpdateTaskMutation ,
+  useDeleteTaskMutation ,
+  useUnAssignTaskMutation
+} = apiSlice;

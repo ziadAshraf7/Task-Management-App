@@ -17,7 +17,7 @@ export class Task {
   title: string;
 
   @Prop({required : true})
-  @Length(50 , 300)
+  @Length(10 , 300)
   @IsString()
   description: string;
 
@@ -25,12 +25,22 @@ export class Task {
   @IsBoolean()
   completed : boolean
 
-  @Prop({type : TaskAssignment , default : []})
-  assignments : TaskAssignment[]
+  @Prop({
+    type: [TaskAssignment],
+    default: [],
+    validate: {
+      validator: function (value: TaskAssignment[]) {
+        const userIds = value.map(item => item.userId.toString());
+        return new Set(userIds).size === userIds.length; 
+      },
+      message: 'Duplicate userId in assignments array',
+    },
+  })
+  assignments: TaskAssignment[];
 
   @Prop({required : true})
   @IsDate()
-  deadline : Date
+  dueDate : Date
 
   @Prop({type : Types.ObjectId , ref : 'User' })
   createdUser : User  

@@ -8,6 +8,7 @@ interface userInfo {
 }
 
 export interface userCookieData {
+    state: userCookieData;
     accessToken : string ,
     user : userInfo
 } 
@@ -16,3 +17,5 @@ export type AppDispatch = typeof store.dispatch;
 
 
 export type endPointsMethods = 'getTasks' 
+
+export type eventHandler = React.ChangeEvent<HTMLInputElement>

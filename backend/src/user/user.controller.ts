@@ -15,11 +15,6 @@ export class UserController {
         return await this.userService.getAll();
     }
 
-    @Get(':id')
-    async findById(@Param('id') userId: string): Promise<User | null> {
-        return await this.userService.findById(userId);
-    }
-
     @Post()
     async create(@Body() createUserDto: CreateUserDto): Promise<User | null> {
         return this.userService.create(createUserDto);
@@ -36,8 +31,8 @@ export class UserController {
         return "Deleted Successfully"
     }
 
-    @Get("")
-    async searchByName(@Query("user-name") query: any) {
-        return await this.userService.findByUserName(query.name);
+    @Get("/search")
+    async searchByName(@Query("userName") userName: string) {
+        return await this.userService.findByUserName(userName);
     }
 }

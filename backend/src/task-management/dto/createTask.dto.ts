@@ -7,12 +7,12 @@ export default class CreateTaskDto {
       @IsString()
       title: string;
     
-      @Length(50 , 300)
+      @Length(10 , 300)
       @IsString()
       description: string;
 
       @IsString()
-      deadline : string
+      dueDate : string
       
       @IsString()
       category : string

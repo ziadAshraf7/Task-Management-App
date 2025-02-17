@@ -9,3 +9,11 @@ export function generateObjectId(id : string) : Types.ObjectId {
                 throw new BadRequestException("id pattern is not correct")
             }
         }
+
+
+
+export class userPayload {
+    userId : string 
+    email : string 
+    name : string
+}

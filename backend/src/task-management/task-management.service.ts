@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { TaskManagementService } from './task-managemnr.interface';
 import { Task } from 'src/task/task.schema';
 import CreateTaskDto from './dto/createTask.dto';
@@ -23,10 +23,6 @@ export class TaskManagementServiceImp implements TaskManagementService {
                       ) {}
     
     
-    finedSharedTasks(userId: string): Promise<Task[] | null> {
-        throw new Error('Method not implemented.');
-    }
-
     async updateTask( updatedTaskDto: UpdatedTaskDto, craetedUserId : string): Promise<Task | null> {
        
         const userObjectId = generateObjectId(craetedUserId)
@@ -75,7 +71,7 @@ export class TaskManagementServiceImp implements TaskManagementService {
        
         if(task.createdUser.toString() !== userId) throw new BadRequestException("bad request")
         console.log(taskAssignmentDto.assignedUserId)
-        task.assignments = task.assignments.filter((el: TaskAssignment) => el.userId.toString() !== taskAssignmentDto.assignedUserId);
+        task.assignments = task.assignments.filter((el: TaskAssignment) => el.user.toString() !== taskAssignmentDto.assignedUserId);
         console.log(task.assignments , "assigns")
         try{
             await Promise.all([
@@ -113,7 +109,7 @@ export class TaskManagementServiceImp implements TaskManagementService {
         if(task.createdUser.toString() !== userId) throw new BadRequestException("bad request")
     
         task.assignments = [{
-            userId : assignedUser._id ,
+            user : assignedUser._id ,
             assignedAt : new Date()
         } , ...task.assignments]
 
@@ -145,7 +141,7 @@ export class TaskManagementServiceImp implements TaskManagementService {
         if(task == null) throw new NotFoundException("task is not found")
         const userTaskId = task.createdUser 
     
-        if(userTaskId.toString() !== userId) throw new UnauthorizedException("user is not authorized to delete this task")
+        if(userTaskId.toString() !== userId) throw new ForbiddenException("user is not authorized to delete this task")
         
         const sharedTaskEntity = await this.sharedTaskModel.findOne({task : taskObjectId})
         try{

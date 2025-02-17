@@ -6,6 +6,7 @@ import { TaskManagementService } from './task-managemnr.interface';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TaskAssignmentDto } from 'src/task/dto/taskAssignment.dto';
 import UpdatedTaskDto from 'src/task/dto/updateTask.dto';
+import { userPayload } from 'src/utills/utills';
 
 @Controller('task-management')
 @UseGuards(AuthGuard)
@@ -16,30 +17,30 @@ export class TaskManagementController {
     ) {}
     
     @Post()
-    async addTask(@Body() taskDto: CreateTaskDto , @Request() req): Promise<Task | null> {
+    async addTask(@Body() taskDto: CreateTaskDto , @Request() req : {user : userPayload}): Promise<Task | null> {
         return this.taskManagmentService.addTask(taskDto , req.user.userId);
     }
 
     @Post("/assign")
-    async assignTask(@Body() taskAssignmentDto : TaskAssignmentDto , @Request() req) : Promise<any> {    
+    async assignTask(@Body() taskAssignmentDto : TaskAssignmentDto , @Request() req : {user : userPayload}) : Promise<any> {    
         await this.taskManagmentService.assignTask(taskAssignmentDto , req.user.userId)
         return {data : "assigned"}
     }
 
     @Post("/unAssign")
-    async unAssignTask(@Body() taskAssignmentDto : TaskAssignmentDto , @Request() req) : Promise<any> {    
+    async unAssignTask(@Body() taskAssignmentDto : TaskAssignmentDto , @Request() req : {user : userPayload}) : Promise<any> {    
         await this.taskManagmentService.unAssignTask(taskAssignmentDto , req.user.userId)
         return {data : "unAssigned"}
     }
 
     @Delete("/:taskId")
-    async deleteTask(@Param("taskId") taskId : string , @Request() req) : Promise<any> {    
+    async deleteTask(@Param("taskId") taskId : string , @Request() req : {user : userPayload}) : Promise<any> {    
         await this.taskManagmentService.deleteTask(taskId , req.user.userId)
         return {data : "deleted"}
     }
 
     @Put("")
-    async updateTask(@Body() updatedTaskDto: UpdatedTaskDto , @Request() req): Promise<Task | null> {
+    async updateTask(@Body() updatedTaskDto: UpdatedTaskDto , @Request() req : {user : userPayload}): Promise<Task | null> {
         return this.taskManagmentService.updateTask(updatedTaskDto , req.user.userId );
     }
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { AuthService } from './auth.interface';
 import { LoginDto } from './dto/login.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -30,9 +30,8 @@ export class AuthServiceImp implements AuthService {
         const userPassword = user.password
 
         const isPasswrodsMatched = await bcrypt.compare(loginPassword , userPassword)
-        if(!isPasswrodsMatched) throw new BadRequestException("password is not correct")
+        if(!isPasswrodsMatched) throw new ForbiddenException("password is not correct")
         if(isPasswrodsMatched){
-            console.log(user.name , user.email)
             const accessToken =  await this.jwtService.signAsync({userId : user._id , userName : user.name , email : user.email})
             return {accessToken  , user : {
                 email : user.email , 

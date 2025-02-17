@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsBoolean, IsDate, IsString, Length, Max, Min } from 'class-validator';
+import { IsBoolean, IsDate, IsString, Length, Validate } from 'class-validator';
 import { HydratedDocument, Types } from 'mongoose';
 import { User } from 'src/user/user.schema';
 import { TaskAssignment } from './dto/taskAssignment';
-import { SharedTask } from 'src/shared-task/shared-task.schema';
+import { NotPastDate } from './validation/date.validation';
 export type CatDocument = HydratedDocument<Task>;
 
 @Schema({
@@ -30,7 +30,7 @@ export class Task {
     default: [],
     validate: {
       validator: function (value: TaskAssignment[]) {
-        const userIds = value.map(item => item.userId.toString());
+        const userIds = value.map(item => item.user.toString());
         return new Set(userIds).size === userIds.length; 
       },
       message: 'Duplicate userId in assignments array',
@@ -40,6 +40,7 @@ export class Task {
 
   @Prop({required : true})
   @IsDate()
+  @Validate(NotPastDate) 
   dueDate : Date
 
   @Prop({type : Types.ObjectId , ref : 'User' })
@@ -49,6 +50,7 @@ export class Task {
   @Length(2 , 20)
   category : string
 }
+
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
 

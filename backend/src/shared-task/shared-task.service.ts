@@ -23,16 +23,16 @@ export class SharedTaskService {
             .select("task")
             .populate<{task : Task & {_id : Types.ObjectId}}>({
                 path: "task",
-                match: Object.keys(tasksQuery).length > 0 ? tasksQuery : undefined, // Only apply match if query is not empty
+                match: Object.keys(tasksQuery).length > 0 ? tasksQuery : undefined, 
                 populate: [
                     { path: "createdUser" },
-                    { path: "assignments.userId", model: "User" }
+                    { path: "assignments.user", model: "User" }
                 ]
             })
             .exec();
             const set = new Set()
             return sharedTasks.filter((e : any) => {
-                if(!set.has(e.task._id.toString())){
+                if(e.task && !set.has(e.task._id.toString())){
                     set.add(e.task._id.toString())
                     return true
                 }
@@ -43,11 +43,9 @@ export class SharedTaskService {
         const query: any = { sharedByUser: generateObjectId(userId) };
     
         let tasksQuery: any = {};
-        console.log(category)
-        console.log(title)
-        if (category != null && typeof category == 'string') tasksQuery.category = category;
-        if (title != null && typeof title == 'string') tasksQuery.title = title;
-        console.log(tasksQuery , "dsd")
+        if (category  ) tasksQuery.category = category;
+        if (title  ) tasksQuery.title = title;
+        console.log(tasksQuery)
         const sharedTasks  = await this.sharedTaskModel
             .find(query)
             .select("task")
@@ -56,13 +54,13 @@ export class SharedTaskService {
                 match: Object.keys(tasksQuery).length > 0 ? tasksQuery : undefined,
                 populate: [
                     { path: "createdUser" },
-                    { path: "assignments.userId", model: "User" }
+                    { path: "assignments.user", model: "User" }
                 ]
             })
             .exec();
         const set = new Set()
         return sharedTasks.filter((e : any) => {
-            if(!set.has(e.task._id.toString())){
+            if(e.task && !set.has(e.task._id.toString())){
                 set.add(e.task._id.toString())
                 return true
             }

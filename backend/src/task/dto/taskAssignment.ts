@@ -5,7 +5,7 @@ import { Types } from "mongoose";
 export class TaskAssignment {
     
     @IsMongoId()
-    userId : Types.ObjectId
+    user : Types.ObjectId
 
     @IsDate()
     assignedAt : Date

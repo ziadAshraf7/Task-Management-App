@@ -42,16 +42,18 @@ export class SharedTaskService {
     async findAssignedTasks(userId: string, category?: string | null, title?: string | null): Promise<Task[]> {
         const query: any = { sharedByUser: generateObjectId(userId) };
     
-        const tasksQuery: any = {};
-        if (category) tasksQuery.category = category;
-        if (title) tasksQuery.title = title;
+        let tasksQuery: any = {};
+        console.log(category)
+        console.log(title)
+        if (category != null && typeof category == 'string') tasksQuery.category = category;
+        if (title != null && typeof title == 'string') tasksQuery.title = title;
         console.log(tasksQuery , "dsd")
         const sharedTasks  = await this.sharedTaskModel
             .find(query)
             .select("task")
             .populate<{task : Task & {_id : Types.ObjectId}}>({
                 path: "task",
-                // match: Object.keys(tasksQuery).length > 0 ? tasksQuery : undefined,
+                match: Object.keys(tasksQuery).length > 0 ? tasksQuery : undefined,
                 populate: [
                     { path: "createdUser" },
                     { path: "assignments.userId", model: "User" }

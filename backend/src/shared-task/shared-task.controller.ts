@@ -12,7 +12,7 @@ export class SharedTasksController {
     constructor(private readonly sharedTasksService: SharedTaskService) {}
 
     @Get("")
-    async getSharedTasks(@Request() req: any , @Query() category : string , @Query() title : string): Promise<Task[] > {
+    async getSharedTasks(@Request() req: any , @Query('category') category : string , @Query('title') title : string): Promise<Task[] > {
         return this.sharedTasksService.findSharedTasks(req.user.userId , category , title)
     }
 

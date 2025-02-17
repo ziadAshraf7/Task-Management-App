@@ -14,7 +14,11 @@ export class TaskServiceImp implements TaskService {
                 ) {}
     
     
-    async findCreatedTasks(userId: string, category: string | null, title: string | null): Promise<Task[]> {
+    async findCreatedTasks(
+        userId: string, 
+        category: string | null, 
+        title: string | null
+    ): Promise<Task[]> {
         const query : any = { createdUser: generateObjectId(userId) };
         if (title) query.title = title;
         if (category) query.category = category;
@@ -33,10 +37,6 @@ export class TaskServiceImp implements TaskService {
         const tasks = await this.taskModel.find({category : category , createdUser : generateObjectId(userId)})
         return tasks
     }
-   
-
-   
-
    
     private async findById(id: string): Promise<Task | null> {
         const taskObjectId = generateObjectId(id)

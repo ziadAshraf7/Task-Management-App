@@ -137,6 +137,8 @@ export class TaskManagementServiceImp implements TaskManagementService {
     }
     
     async deleteTask(id: string , userId : string ): Promise<void> {
+        const session = await this.sharedTaskModel.startSession();
+        session.startTransaction();
 
         const taskObjectId = generateObjectId(id)
         const task = await this.taskModel.findById(taskObjectId) 
@@ -149,12 +151,15 @@ export class TaskManagementServiceImp implements TaskManagementService {
         try{
             if(sharedTaskEntity){
                 await Promise.all([
-                    task.deleteOne() ,
+                    task.deleteOne({session}) ,
                     sharedTaskEntity.deleteOne()
                 ])
                 return
             }
            await task.deleteOne()
+
+           await session.commitTransaction();
+           session.endSession();
         }catch(e){
             Logger.error(e)
             throw new InternalServerErrorException("cannot delete task")
@@ -166,7 +171,12 @@ export class TaskManagementServiceImp implements TaskManagementService {
     
                     const user = await this.userModel.findById(userObjectId)
                     if(user == null) throw new NotFoundException("user does not exists")
+                    
+                        if (new Date(createTaskDto.dueDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
+                            throw new BadRequestException("due date is in the past");
+                        }
                         
+                    
                     const newTask = new this.taskModel({...createTaskDto, createdUser : userObjectId }); 
                  
                    try{
@@ -189,7 +199,9 @@ export class TaskManagementServiceImp implements TaskManagementService {
                         throw new InternalServerErrorException("error while creating task")
                     }
         }
-            private isCategoryUsedBeforeByUser(categoryName : string , user : User) : boolean{
+            
+        
+        private isCategoryUsedBeforeByUser(categoryName : string , user : User) : boolean{
                 return user.userTasksCategories.includes(categoryName)
             }
 }

@@ -4,6 +4,7 @@ import { useRegisterMutation } from '@/app/_redux/apiSlice'
 import { eventHandler } from '@/app/_types/types'
 import { Button, Input } from '@heroui/react'
 import {  message } from 'antd'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useState } from 'react'
 
@@ -37,58 +38,105 @@ function SignUpPage() {
   }
 
   return (
-    <section className='h-screen w-screen flex justify-center items-center'>
-      <form className='p-5 border border-neutral-500 rounded-xl ' onSubmit={handleRegister}>
-        <span className=' text-xl text-neutral-800 font-semibold'>SignUp</span>
-      <Input
-        type="text"
-        placeholder="Name"
-        required
-        value={name}
-        onChange={(e : eventHandler) => setName(e.target.value)}
-        className="p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <Input
-        type="email"
-        placeholder="Email"
-        value={email}
-        required
+    <section className="w-screen h-screen flex justify-center items-center bg-gradient-to-r from-blue-50 to-indigo-50">
+    <form
+      className="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8 space-y-6"
+      onSubmit={handleRegister}
+    >
+      {/* SignUp Heading */}
+      <div className="text-center">
+        <h2 className="text-3xl font-bold text-gray-800">Create Your Account</h2>
+        <p className="text-sm text-gray-500 mt-2">Join us to start managing your tasks</p>
+      </div>
+  
+      {/* Name Input */}
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          Name
+        </label>
+        <Input
+          id="name"
+          type="text"
+          size='sm'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter your name"
+          required
+        />
+      </div>
+  
+      {/* Email Input */}
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          Email
+        </label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          size='sm'
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+  
+      {/* Password Input */}
+      <div>
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          Password
+        </label>
+        <Input
+          id="password"
+          type="password"
+          size='sm'
 
-        onChange={(e) => setEmail(e.target.value)}
-        className="p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <Input
-        type="password"
-        placeholder="Password"
-        value={password}
-        required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+  
+      {/* Re-enter Password Input */}
+      <div>
+        <label htmlFor="rePassword" className="block text-sm font-medium text-gray-700">
+          Re-enter Password
+        </label>
+        <Input
+          id="rePassword"
+          type="password"
+          size='sm'
 
-        onChange={(e) => setPassword(e.target.value)}
-        className="p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <Input
-        type="password"
-        placeholder="Re-enter Password"
-        required
-
-        value={rePassword}
-        onChange={(e) => setRePassword(e.target.value)}
-        className="p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      {/* <Input
-        type="file"
-        required
-        onChange={(e) => setImage(e.target.files ? e.target.files[0] : null )}
-        className="p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-      /> */}
-      <Button
-         isLoading = {isLoading}
-        type='submit'
-      >
-        Submit
-      </Button>
-      </form>
-    </section>
+          value={rePassword}
+          onChange={(e) => setRePassword(e.target.value)}
+          placeholder="Re-enter your password"
+          required
+        />
+      </div>
+  
+      {/* Submit Button */}
+      <div>
+        <Button
+          type="submit"
+          color='primary'
+          className='w-full'
+          disabled={isLoading}
+          isLoading = {isLoading}
+        >
+          Register
+        </Button>
+      </div>
+  
+      {/* Login Suggestion */}
+      <div className="text-center text-sm text-gray-500">
+        Already have an account?{" "}
+        <Link href="/auth/login" className="text-blue-600 hover:text-blue-500">
+          Login
+        </Link>
+      </div>
+    </form>
+  </section>
   )
 }
 

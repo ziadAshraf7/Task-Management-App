@@ -1,7 +1,7 @@
 
 import React from 'react'
 import ProtectedPage from '../_components/protectedPage'
-import NavBar from './_components/navBar'
+import SideBar from './_components/sideBar'
 import Header from '../_components/header'
 
 function DashboardLayout({
@@ -11,11 +11,11 @@ function DashboardLayout({
 }) {
   return (
     <ProtectedPage >
+     <Header/>
      <section className='flex' id='dashboard'>
-        <NavBar />
-        <div className='w-full'>
-        <Header/>
-         {children}
+        <SideBar />
+        <div className='flex-1'>
+          {children}
         </div>
      </section>
     </ProtectedPage>

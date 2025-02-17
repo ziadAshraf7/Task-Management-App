@@ -1,7 +1,8 @@
-import { useAssignTaskMutation, useUnAssignTaskMutation } from "@/app/_redux/apiSlice"
-import { Button } from "@heroui/react"
+import {  useUnAssignTaskMutation } from "@/app/_redux/apiSlice"
+import { User } from "@/app/_types/types"
+import { Button, Spinner } from "@heroui/react"
 import { message } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 
@@ -18,16 +19,14 @@ function UnAssignUserModal({
 }) {
 
     const [userNameSearch , setUserNameSearch] = useState("")
-    const [selectedUser , setSelectedUser] = useState<any>(null)
-    const [unAssignTask] = useUnAssignTaskMutation()
-
-    console.log(assignedUsers , "dfddf")
+    const [selectedUser , setSelectedUser] = useState<{user : User} | null>(null)
+    const [unAssignTask , {isLoading}] = useUnAssignTaskMutation()
    
     async function handleUnAssigningTask(){
         if(!selectedUser || !selectedTaskId) return
-        console.log(selectedTaskId ,selectedUser.userId._id )
+        console.log(selectedTaskId ,selectedUser.user._id )
         const response : any = await unAssignTask({
-            assignedUserId: selectedUser.userId._id,
+            assignedUserId: selectedUser.user._id,
             taskId : selectedTaskId
         })
         if(response.error){
@@ -38,18 +37,25 @@ function UnAssignUserModal({
         }
     }
 
+ 
+    if(userNameSearch){
+      assignedUsers = assignedUsers.filter((user : {user : User}) => user.user.name.toLowerCase().includes(userNameSearch.toLowerCase()))
+    }
 
  if(!isOpen) return null
   return (
-    <section className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10'>
+    <section className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
     <div className='bg-white rounded-lg shadow-lg w-[80%] h-[90%] max-w-2xl max-h-[90vh] overflow-y-auto relative'>
       {/* Close Button */}
-      <button
-        onClick={() => setIsOpen(false)}
-        className='absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl font-bold'
-      >
-        ×
-      </button>
+      <div className='flex justify-end'>
+        <button
+          onClick={() => setIsOpen(false)}
+          className=' p-3 text-gray-600 hover:text-gray-900 text-xl font-bold'
+        >
+          X
+        </button>
+      </div>
+     
   
       {/* Search Input */}
       <div className='p-4 border-b'>
@@ -64,31 +70,25 @@ function UnAssignUserModal({
   
       {/* User List */}
       <div className='p-4 overflow-scroll'>
-        {assignedUsers?.map((el: any) => {
+        {assignedUsers?.map((el: {id : string , user : User}) => {
             return (
               <div
                 key={el.id}
                 onClick={() => setSelectedUser(el)}
-                className={`${selectedUser?.userId.email == el?.userId?.email ? "bg-gray-200" : ""} p-2 hover:bg-gray-100 cursor-pointer rounded-lg`}
+                className={`${selectedUser?.user.email == el?.user?.email ? "bg-gray-200" : ""} p-2 hover:bg-gray-100 cursor-pointer rounded-lg`}
               >
-                <div>{el.userId.name}</div>
-                <div className='text-xs'>{el.userId.email}</div>
+                <div>{el.user.name}</div>
+                <div className='text-xs'>{el.user.email}</div>
               </div>
             );
         })}
       </div>
   
-      {/* Loading State */}
-      {/* {isFetching && (
-        <div className='mx-auto'>
-             <Spinner></Spinner>
-        </div>
-      )} */}
-  
       {/* Submit Button */}
       <div className='p-4 border-t'>
         <Button
-        //   isLoading = {isFetching}
+          isLoading = {isLoading}
+          color="primary"
           onPress={handleUnAssigningTask}
           className='w-full  text-white  '
         >

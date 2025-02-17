@@ -1,30 +1,30 @@
 'use client'
 
-import { Button } from '@heroui/react'
-import React from 'react'
+import { User } from '@/app/_types/types'
+import { Button, Chip, Tooltip } from '@heroui/react'
+import Image from 'next/image'
+import React, { Dispatch, SetStateAction } from 'react'
 
 function TaskCard({
     setIsOpen ,
-    _id ,
+    _id : taskId ,
     title  , 
     description  , 
     category  , 
     dueDate  , 
     completed , 
-    createdUser ,
     assignments ,
     setSelectedTaskId
   } : {
-    setIsOpen : any
+    setIsOpen : Dispatch<SetStateAction<boolean>>
     _id : string
     title : string, 
     description : string, 
     category : string, 
     dueDate : string, 
     completed : boolean, 
-    createdUser : any ,
-    assignments : any[] ,
-    setSelectedTaskId : any
+    assignments : {user : User}[] ,
+    setSelectedTaskId : Dispatch<SetStateAction<string>>
 }) {
   return (
     <div className="max-w-sm rounded-lg p-2 overflow-hidden shadow-lg bg-white border border-gray-200 hover:shadow-xl transition-shadow duration-300">
@@ -54,10 +54,19 @@ function TaskCard({
         <span className="ml-2">{assignments.length}</span>
       </div>
     </div>
-    <Button onPress={() => {
+    
+    <Tooltip content = "assign user">
+    <Chip 
+    onClick={() => {
       setIsOpen(true)
-      setSelectedTaskId(_id)
-      }} color='danger'>assign</Button>
+      setSelectedTaskId(taskId)
+      }} 
+      className='cursor-pointer'
+      color='success'>
+        <Image src={"/assets/add.png"} alt='' width={20} height={20} />
+      </Chip>
+      </Tooltip>
+
   </div>
   )
 }

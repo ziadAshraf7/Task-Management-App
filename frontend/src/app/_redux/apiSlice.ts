@@ -2,7 +2,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import Cookies from "js-cookie";
 import { extractUserData } from '../_utills/utills';
-import { userCookieData } from '../_types/types';
+import { User, userCookieData } from '../_types/types';
 import { endpoint } from '../api/api';
 
 export const apiSlice = createApi({
@@ -35,7 +35,10 @@ export const apiSlice = createApi({
     }),
 
     getAssignedTasks: builder.query({
-      query: (query : any) => ({url :'/shared-tasks/assigned' , params : query}),
+      query: (searchParams : {category : string , title : string} | undefined) => ({
+        url :'/shared-tasks/assigned' , 
+        params : searchParams
+      }),
       providesTags: ['AssignedTasks'], 
     }),
 
@@ -83,7 +86,7 @@ export const apiSlice = createApi({
         method: 'POST',
         body: newData,
       }),
-      invalidatesTags: ['AssignedTasks'], 
+      invalidatesTags: ['AssignedTasks' , 'CreatedTasks'], 
     }),
 
     unAssignTask: builder.mutation({
@@ -92,7 +95,7 @@ export const apiSlice = createApi({
         method: 'POST',
         body: newData,
       }),
-      invalidatesTags: ['AssignedTasks'], 
+      invalidatesTags: ['AssignedTasks' , 'CreatedTasks'], 
     }),
 
     register: builder.mutation({
@@ -108,7 +111,7 @@ export const apiSlice = createApi({
             method : 'POST' , 
             body : loginData
         }),
-        transformResponse: (response : any) => {
+        transformResponse: (response : {accessToken : string , user : User}) => {
             const  {accessToken , user}  = response;
     
             Cookies.set("user", JSON.stringify(response));

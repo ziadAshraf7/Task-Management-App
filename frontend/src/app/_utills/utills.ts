@@ -18,7 +18,7 @@ export const extractUserData = (): userCookieData | null => {
 
 export const getDefaultHeaders = () => {
     
-    const headers : any = {
+    const headers : {"Content-Type" : string} = {
         "Content-Type": "application/json",
     }
     

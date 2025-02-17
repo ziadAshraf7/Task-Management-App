@@ -1,21 +1,23 @@
 
-'use client'
 
 import React from 'react'
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { extractUserData } from '../_utills/utills';
+import { useSelector } from 'react-redux';
+import { userCookieData } from '../_types/types';
+import { exctractServerSideUserCookie } from '../_utills/serverSideUttils';
 
 function ProtectedPage({
     children
 }:{
     children: React.ReactNode
 }) {
-    const user = extractUserData()
-    const router =  useRouter()
+  
+  const userCookie = exctractServerSideUserCookie()
 
-    console.log(user , "protected")
-
-   if(!user || !user.user.id ) router.replace("/")
+  if(!userCookie?.accessToken && !userCookie?.user?.id)  { 
+    redirect("/")
+  }
 
  
  return (

@@ -7,6 +7,10 @@ import UserStore from "./_components/userStore";
 import { userCookieData } from "./_types/types";
 
 
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
+
 export default function RootLayout({
   children,
 }: {

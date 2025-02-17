@@ -2,7 +2,8 @@
 'use client'
 
 import { useGetAssignedTasksQuery, useGetSharedTasksQuery } from '@/app/_redux/apiSlice'
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Chip } from '@heroui/react'
+import { Task, userCookieData } from '@/app/_types/types';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Chip, Spinner } from '@heroui/react'
 import React from 'react'
 import { useSelector } from 'react-redux';
 
@@ -26,9 +27,9 @@ const columns = [
   ];
 
 function Projects() {
-  const userData = useSelector((state : any) => state.user);
+  const userData = useSelector((state : {user : {user : userCookieData | undefined}}) => state.user);
   let {data : sharedTasks , isLoading : sharedTasksLoading} = useGetSharedTasksQuery(null)
-  let {data : assignedTasks , isLoading : assignedTasksLoading} = useGetAssignedTasksQuery(null)
+  let {data : assignedTasks , isLoading : assignedTasksLoading} = useGetAssignedTasksQuery(undefined)
 
  const tasks =  []
   
@@ -39,13 +40,28 @@ function Projects() {
  if (tasks) {
   tasks.sort(() => Math.random() - 0.5);
 }
-  console.log(sharedTasks , "shared tasks")
 
-  if(sharedTasksLoading || assignedTasksLoading) return "loading"
+  if(sharedTasksLoading || assignedTasksLoading) return <Spinner className='text-center'></Spinner>
+  if(tasks.length == 0) return (<>
+    <div className="flex flex-col items-center justify-center py-10">
+      <h2 className="text-3xl font-semibold text-gray-700">
+        You don't have any projects to work on right now.
+      </h2>
+      <p className="text-lg text-gray-500 mt-2">
+        It seems you are not yet included in any projects .
+      </p>
+    </div>
+    </>)
   return (
-    <section id='projects'>
-      <h2>Projects</h2>
-      <Table aria-label="Task details table">
+    <section className='w-full' id='projects'>
+      <h2 className='text-2xl mb-5 font-semibold text-neutral-800'>Projects</h2>
+      <div  className="w-[800px] overflow-x-scroll">
+      <Table  
+      aria-label="Task details table"
+      classNames={{
+        base: "w-full", 
+      }}
+      >
         <TableHeader>
           <TableColumn>TASK TITLE</TableColumn>
           <TableColumn>CREATED BY</TableColumn>
@@ -54,7 +70,7 @@ function Projects() {
           <TableColumn>DUEDATE</TableColumn>
         </TableHeader>
         <TableBody>
-              {tasks?.slice(0,8).map((task : any) => {
+              {tasks?.slice(0,5).map((task : Task) => {
                 return <TableRow key={task._id}>
                 <TableCell>{ task.title}</TableCell>
                 <TableCell>
@@ -76,6 +92,7 @@ function Projects() {
               })}
         </TableBody>
     </Table>
+    </div>
     </section>
   )
 }

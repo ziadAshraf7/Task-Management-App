@@ -8,6 +8,7 @@ A full-stack task management application built with NestJS (backend), Next.js (f
   - Assign tasks to other users.
   - Share tasks as projects.
   - Unassign users from tasks.
+  - tasks are categorized , users can search tasks by category and also title
 - **Project Collaboration:** Users can collaborate on shared tasks.
 - **Responsive UI:** Built with Next.js for a seamless user experience.
 - **Scalable Backend:** Powered by NestJS for robust and maintainable APIs.

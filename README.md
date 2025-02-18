@@ -68,12 +68,6 @@ Install dependencies:
 ```bash
 npm install
 ```
-Create a `.env.local` file in the frontend folder and add the following environment variable:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
-```
-This ensures the frontend communicates with the backend API.
-
 Start the frontend application:
 ```bash
 npm run dev

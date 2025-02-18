@@ -1,99 +1,110 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Task Management App
+A full-stack task management application built with NestJS (backend), Next.js (frontend), and MongoDB (database). This app allows users to create, update, delete, and assign tasks. Users can also share tasks as projects, and task owners can unassign users from tasks.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Features
+- **User Authentication:** Secure user registration and login.
+- **Task Management:**
+  - Create, update, and delete tasks.
+  - Assign tasks to other users.
+  - Share tasks as projects.
+  - Unassign users from tasks.
+- **Project Collaboration:** Users can collaborate on shared tasks.
+- **Responsive UI:** Built with Next.js for a seamless user experience.
+- **Scalable Backend:** Powered by NestJS for robust and maintainable APIs.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Technologies Used
+- **Frontend:** Next.js, React, TailwindCSS (or any other UI library you're using).
+- **Backend:** NestJS, TypeScript.
+- **Database:** MongoDB.
+- **Authentication:** JWT (JSON Web Tokens).
 
-## Description
+## Project Structure
+The project is divided into two main folders:
+- `frontend`: Contains the Next.js application.
+- `backend`: Contains the NestJS application.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Setup Instructions
+Follow these steps to set up and run the project locally.
 
-## Project setup
+### Prerequisites
+- Node.js (v16 or higher) installed.
+- MongoDB installed and running locally or a connection string for a remote MongoDB instance.
+- Git (optional, for cloning the repository).
 
+### Step 1: Clone the Repository
 ```bash
-$ npm install
+git clone [https://github.com/your-username/task-management-app.git](https://github.com/ziadAshraf7/Task-Management-App.git)
+cd Task-Management-App
 ```
 
-## Compile and run the project
-
+### Step 2: Set Up the Backend
+Navigate to the backend folder:
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cd backend
 ```
-
-## Run tests
-
+Install dependencies:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
+Create a `.env` file in the backend folder and add the following environment variables:
+```env
+DATABASE_HOST=mongodb+srv://ziad:01006745475@cluster0.lnghtdz.mongodb.net/task_managment?retryWrites=true&w=majority
+JWT_KEY=bG1Yk8zqX9NvR3+eY5dP2KcV5sLwT7JfQ4Xh9YzM0VpRnB6ZsJtNqKdX2LgZrWmX
+```
+Replace `your_jwt_secret_key` with a secure secret key for JWT authentication.
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+Start the backend server:
 ```bash
-$ npm install -g mau
-$ mau deploy
+npm run start:dev
 ```
+The backend will run on [http://localhost:4000](http://localhost:4000).
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Step 3: Set Up the Frontend
+Navigate to the frontend folder:
+```bash
+cd ../frontend
+```
+Install dependencies:
+```bash
+npm install
+```
+Create a `.env.local` file in the frontend folder and add the following environment variable:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+This ensures the frontend communicates with the backend API.
 
-## Resources
+Start the frontend application:
+```bash
+npm run dev
+```
+The frontend will run on [http://localhost:3000](http://localhost:3000).
 
-Check out a few resources that may come in handy when working with NestJS:
+## Usage
+Open your browser and go to [http://localhost:3000](http://localhost:3000).
+- Register a new account or log in if you already have one.
+- Create, update, or delete tasks.
+- Assign tasks to other users or share them as projects.
+- Unassign users from tasks if you're the task owner.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Contributing
+Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Commit your changes.
+4. Push your branch and submit a pull request.
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Please ensure your code follows the project's coding standards and includes appropriate tests.
 
 ## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Acknowledgments
+- **NestJS** for the powerful backend framework.
+- **Next.js** for the intuitive frontend framework.
+- **MongoDB** for the flexible NoSQL database.
+
+## Contact
+If you have any questions or feedback, feel free to reach out:
+- **Email:** zeyadashraf899@gmail.com
+- **LinkedIn:** [Your Name](https://www.linkedin.com/in/ziad-ashraf-8a75bb25a)

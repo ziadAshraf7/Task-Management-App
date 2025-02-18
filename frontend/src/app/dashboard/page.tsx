@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 function DashboardMainPage() {
     const dispatch = useDispatch()
     const router = useRouter()
-    const {data : sharedTasks , isLoading : sharedTasksLoading , error : sharedTasksError } = useGetSharedTasksQuery(null)
+    const {data : sharedTasks , isLoading : sharedTasksLoading , error : sharedTasksError } = useGetSharedTasksQuery(undefined)
     const {data : assignedTasks , isLoading : assignedTasksLoading , error : assignedTasksError} = useGetAssignedTasksQuery(undefined)
     const {data : createdTasks , isLoading : createdTasksLoading , error : createdTasksError} = useGetCreatedTasksQuery(undefined)
     

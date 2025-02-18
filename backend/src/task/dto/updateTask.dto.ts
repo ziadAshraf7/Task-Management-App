@@ -11,4 +11,13 @@ export default class UpdatedTaskDto extends PartialType(CreateTaskDto) {
 
     @IsString()
     taskId : string
+
+    @IsOptional()
+    @IsString()
+    title : string 
+
+    @IsOptional()
+    @IsString()
+    description : string
+
 }

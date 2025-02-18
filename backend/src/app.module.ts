@@ -8,6 +8,9 @@ import { UserModule } from './user/user.module';
 import { TaskManagementModule } from './task-management/task-management.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedTaskModule } from './shared-task/shared-task.module';
+import { ReminderService } from './reminder/reminder.service';
+import { EmailService } from './email/email.service';
+import { ReminderModule } from './reminder/reminder.module';
 import configurations from './config/configurations';
 
 @Module({
@@ -28,9 +31,10 @@ import configurations from './config/configurations';
     TaskManagementModule,
     AuthModule,
     SharedTaskModule,
+    ReminderModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ReminderService, EmailService],
 })
 
 export class AppModule {}

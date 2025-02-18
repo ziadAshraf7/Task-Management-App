@@ -1,8 +1,9 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import Cookies from "js-cookie";
 import { extractUserData } from '../_utills/utills';
-import { User, userCookieData } from '../_types/types';
+import { tasksSearchParams, User, userCookieData } from '../_types/types';
 import { endpoint } from '../api/api';
+
 
 export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ 
@@ -26,15 +27,15 @@ export const apiSlice = createApi({
    
    
     getSharedTasks: builder.query({
-      query: (query) => ({
+      query: (searchParams : tasksSearchParams | undefined) => ({
         url :'/shared-tasks',
-        params : query
+        params : searchParams
       }),
       providesTags: ['SharedTasks'], 
     }),
 
     getAssignedTasks: builder.query({
-      query: (searchParams : {category : string , title : string} | undefined) => ({
+      query: (searchParams : tasksSearchParams  | undefined) => ({
         url :'/shared-tasks/assigned' , 
         params : searchParams
       }),
@@ -42,7 +43,7 @@ export const apiSlice = createApi({
     }),
 
     getCreatedTasks: builder.query({
-      query: (searchParams : any) => ({
+      query: (searchParams : tasksSearchParams | undefined) => ({
         url: '/tasks',
         params: searchParams, 
       }),
@@ -50,7 +51,7 @@ export const apiSlice = createApi({
     }),
 
     searchUser : builder.query({
-      query: (searchTerm) => `/users/search?userName=${searchTerm}`,
+      query: (searchTerm : string) => `/users/search?userName=${searchTerm}`,
     }),
 
     updateTask: builder.mutation({
@@ -63,7 +64,7 @@ export const apiSlice = createApi({
     }),
 
     deleteTask: builder.mutation({
-      query: (taskId) => ({
+      query: (taskId : string) => ({
         url: '/task-management/' + taskId,
         method: 'DELETE',
       }),

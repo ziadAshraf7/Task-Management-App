@@ -3,19 +3,21 @@
 import { useGetCreatedTasksQuery } from '@/app/_redux/apiSlice'
 import React, { ChangeEventHandler, useState } from 'react'
 import TaskCard from '../_components/taskCard'
-import { Chip, Input, Select, SelectItem, Spinner } from '@heroui/react'
+import { Chip, Input, Select, SelectItem, Spinner, useDisclosure } from '@heroui/react'
 import { eventHandler, Task } from '@/app/_types/types'
 import { logOut } from '@/app/auth/_utills/utills'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/navigation'
+import UpdateTaskModal from './_components/updateTaskModal'
 
 function TasksPage() {
-
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [title , setTitle] = useState("")
     const [category , setCategory] = useState("")
     const [completed , setCompleted] = useState<"completed" | "pending"  | string>()
     const dispatch = useDispatch()
     const router = useRouter()
+    const [selectedTaskId , setSelectedTaskId] = useState("")
 
     const query = {
         category : category, 
@@ -46,6 +48,7 @@ function TasksPage() {
 
   return (
     <section id="user-created-tasks" className="p-5 rounded-lg shadow-lg">
+      {isOpen && <UpdateTaskModal selectedTaskId = {selectedTaskId} onOpenChange={onOpenChange} isOpen = {isOpen} />}
       <h2 className="mb-5 text-2xl font-semibold text-gray-800">Created Tasks</h2>
       <div className="flex flex-col w-full md:flex-row gap-4 mb-5">
         <Input
@@ -79,7 +82,7 @@ function TasksPage() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {createdTasks?.map((task : Task) => {
-          return <TaskCard key={task._id} {...task} />;
+          return <TaskCard setSelectedTaskId = {setSelectedTaskId} onOpen = {onOpen} key={task._id} {...task} />;
         })}
       </div>
     </section>

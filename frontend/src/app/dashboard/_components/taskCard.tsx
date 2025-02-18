@@ -2,14 +2,15 @@
 
 import { useDeleteTaskMutation, useUpdateTaskMutation } from "@/app/_redux/apiSlice";
 import { userCookieData } from "@/app/_types/types";
-import { faMarker, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faFilePen, faMarker, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip } from "@heroui/react";
 import { message } from "antd";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 
 const TaskCard = ({
+    onOpen ,
     _id ,
     title  , 
     description  , 
@@ -17,8 +18,10 @@ const TaskCard = ({
     dueDate  , 
     completed , 
     createdUser ,
-    assignments
+    assignments ,
+    setSelectedTaskId
   } : {
+    onOpen : any
     _id : string
     title : string, 
     description : string, 
@@ -27,6 +30,7 @@ const TaskCard = ({
     completed : boolean, 
     createdUser : any ,
     assignments : any[] ,
+    setSelectedTaskId : Dispatch<SetStateAction<string>>
 }) => {
     const userState = useSelector((state : {user : {user : userCookieData}}) => state.user);
     const [updatTask] = useUpdateTaskMutation()
@@ -103,6 +107,14 @@ const TaskCard = ({
         >     
           <FontAwesomeIcon icon={faTrash} />       
       </button>  
+      <div 
+                className="p-2 rounded-lg bg-red-50 hover:bg-red-100 text-blue-600 transition duration-300 hover:scale-105 ml-3"
+      onClick={() => {
+        onOpen()
+        setSelectedTaskId(_id)
+      }}>
+        <FontAwesomeIcon icon={faFilePen} />
+      </div>
       </div>
     )}
   </div>

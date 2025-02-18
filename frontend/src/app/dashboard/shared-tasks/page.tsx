@@ -17,7 +17,7 @@ function SharedTasks() {
   const dispatch = useDispatch()
   const router = useRouter()
     
-  const query = {
+  const query  = {
         category : category, 
         title : title ,
         completed : completed  ,

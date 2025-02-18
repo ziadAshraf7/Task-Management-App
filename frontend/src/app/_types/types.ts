@@ -51,3 +51,6 @@ export type SharedTask = {
     sharedByUser : User , 
     sharedWithUser : User ,
 }
+export type tasksSearchParams = {
+    
+}

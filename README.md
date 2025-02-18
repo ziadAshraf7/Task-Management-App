@@ -33,7 +33,7 @@ Follow these steps to set up and run the project locally.
 
 ### Step 1: Clone the Repository
 ```bash
-git clone [https://github.com/your-username/task-management-app.git](https://github.com/ziadAshraf7/Task-Management-App.git)
+git clone https://github.com/ziadAshraf7/Task-Management-App.git
 cd Task-Management-App
 ```
 

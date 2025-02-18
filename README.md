@@ -107,4 +107,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Contact
 If you have any questions or feedback, feel free to reach out:
 - **Email:** zeyadashraf899@gmail.com
-- **LinkedIn:** [Your Name](https://www.linkedin.com/in/ziad-ashraf-8a75bb25a)
+- **LinkedIn:** https://www.linkedin.com/in/ziad-ashraf-8a75bb25a

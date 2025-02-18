@@ -11,25 +11,31 @@ export class SharedTaskService {
 
     constructor(@InjectModel(SharedTask.name) private readonly sharedTaskModel : Model<SharedTask>){}
 
-    async findSharedTasks(userId: string, category?: string, title?: string): Promise<Task[]> {
+    async findSharedTasks(userId: string, 
+        category?: string, 
+        title?: string ,
+        completed? : "completed" | "pending" 
+    ): Promise<Task[]> {
         const query: any = { sharedWithUser: generateObjectId(userId) };
     
-        const tasksQuery: any = {};
-        if (category && typeof category === 'string') tasksQuery.category = category;
-        if (title && typeof title === 'string') tasksQuery.title = title;
-    
+        const tasksQuerySearch: any = {};
+        if (category) tasksQuerySearch.category = category;
+        if (title) tasksQuerySearch.title = title;
+        if(completed) completed == 'completed' ? tasksQuerySearch.completed = true : tasksQuerySearch.completed = false
+
         const sharedTasks = await this.sharedTaskModel
             .find(query)
             .select("task")
             .populate<{task : Task & {_id : Types.ObjectId}}>({
                 path: "task",
-                match: Object.keys(tasksQuery).length > 0 ? tasksQuery : undefined, 
+                match: Object.keys(tasksQuerySearch).length > 0 ? tasksQuerySearch : undefined, 
                 populate: [
                     { path: "createdUser" },
                     { path: "assignments.user", model: "User" }
                 ]
             })
             .exec();
+
             const set = new Set()
             return sharedTasks.filter((e : any) => {
                 if(e.task && !set.has(e.task._id.toString())){
@@ -39,19 +45,24 @@ export class SharedTaskService {
             }).map(e => e.task);
     }
 
-    async findAssignedTasks(userId: string, category?: string | null, title?: string | null): Promise<Task[]> {
+    async findAssignedTasks(userId: string, 
+        category?: string | null, 
+        title?: string | null ,
+        completed? : "completed" | "pending"
+    ): Promise<Task[]> {
         const query: any = { sharedByUser: generateObjectId(userId) };
     
-        let tasksQuery: any = {};
-        if (category  ) tasksQuery.category = category;
-        if (title  ) tasksQuery.title = title;
-        console.log(tasksQuery)
+        const tasksQuerySearch: any = {};
+        if (category  ) tasksQuerySearch.category = category;
+        if (title  ) tasksQuerySearch.title = title;
+        if(completed) completed == 'completed' ? tasksQuerySearch.completed = true : tasksQuerySearch.completed = false
+
         const sharedTasks  = await this.sharedTaskModel
             .find(query)
             .select("task")
             .populate<{task : Task & {_id : Types.ObjectId}}>({
                 path: "task",
-                match: Object.keys(tasksQuery).length > 0 ? tasksQuery : undefined,
+                match: Object.keys(tasksQuerySearch).length > 0 ? tasksQuerySearch : undefined,
                 populate: [
                     { path: "createdUser" },
                     { path: "assignments.user", model: "User" }

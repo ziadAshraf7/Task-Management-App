@@ -4,6 +4,7 @@ import { TASK_SERVICE_IMP_TOKEN } from './task.service';
 import { Task } from './task.schema';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { userPayload } from 'src/utills/utills';
+import { TaskQueryDto } from 'src/dto/taskQuerySearch.dto';
 
 @Controller('tasks')
 @UseGuards(AuthGuard)
@@ -14,12 +15,21 @@ export class TaskController {
     ) {}
 
     @Get()
-    async getAllTasksByUserId(@Request() req : {user : userPayload}, @Query("title") title : string  , @Query("category") category : string) : Promise<Task[] | null> {
-        return this.taskService.findCreatedTasks(req.user.userId , category , title)
+    async getAllTasksByUserId(@Request() req : {user : userPayload}, 
+    @Query() taskQueryDto : TaskQueryDto ) : Promise<Task[] | null> {
+        return this.taskService.findCreatedTasks(
+            req.user.userId , 
+            taskQueryDto?.category , 
+            taskQueryDto?.title ,
+            taskQueryDto?.completed ,
+            taskQueryDto?.dueDate
+        ) 
+           
     }
 
     @Get("/category/:categoryName")
-    async findByCategory(@Param("categoryName") category : string , @Request() req : {user : userPayload}) : Promise<Task[]> {
+    async findByCategory(@Param("categoryName") 
+    category : string , @Request() req : {user : userPayload}) : Promise<Task[]> {
         return this.taskService.findByCategory(category , req.user.userId)
     }
 }

@@ -81,7 +81,8 @@ function Header() {
 
   <NavbarContent className="hidden sm:flex gap-4" justify="center">
     {menuItems.map((nav) => {
-      return <NavbarItem 
+      return <NavbarItem
+        key={nav.activeKey} 
         isActive = {path.includes(nav.activeKey)}
       >
       <Link color={path.includes(nav.activeKey) ? "primary" : 'foreground'}  href={nav.value}>

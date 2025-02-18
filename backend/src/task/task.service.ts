@@ -16,14 +16,18 @@ export class TaskServiceImp implements TaskService {
     
     async findCreatedTasks(
         userId: string, 
-        category: string | null, 
-        title: string | null
+        category: string , 
+        title: string  ,
+        completed : 'completed' | "pending"  , 
+        dueDate : "ASC" | "DESC"
     ): Promise<Task[]> {
         const query : any = { createdUser: generateObjectId(userId) };
+        const sort : any = {}
         if (title) query.title = title;
         if (category) query.category = category;
-        
-        const tasks = await this.taskModel.find(query).populate("createdUser").exec();
+        if(completed) completed === "completed" ? query.completed = true : query.completed = false
+        if(dueDate) dueDate == "ASC" ?  sort.dueDate = 1 : sort.dueDate = -1
+        const tasks = await this.taskModel.find(query).sort(sort).populate("createdUser").exec();
         return tasks;
     }
     

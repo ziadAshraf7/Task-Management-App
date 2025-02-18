@@ -21,7 +21,7 @@ function DashboardMainPage() {
     }
 
   return (
-    <section className='w-full p-5'>
+    <section className='w-[300px] md:w-[800px] lg:w-[1000px] overflow-x-auto  p-5'>
         
         {<div className='w-full mx-auto mb-10 flex flex-col  md:flex-row justify-between'>
            <CustomCard title= {"Shared Tasks"} cardBody={sharedTasks?.length} />

@@ -1,34 +1,47 @@
 'use client'
 
 import { useGetSharedTasksQuery } from '@/app/_redux/apiSlice'
-import { Input, Spinner } from '@heroui/react'
-import React, { useState } from 'react'
-import { eventHandler, Task } from '@/app/_types/types'
+import { Input, Select, SelectItem, Spinner } from '@heroui/react'
+import React, { useEffect, useState } from 'react'
+import { eventHandler, Task, userCookieData } from '@/app/_types/types'
 import TaskCard from './_compoenets/taskCard'
 import { logOut } from '@/app/auth/_utills/utills'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 
 function SharedTasks() {
+  const userData = useSelector((state : {user : {user : userCookieData}}) => state.user)
   const [title , setTitle] = useState("")
   const [category , setCategory] = useState("")
+  const [completed , setCompleted] = useState<"completed" | "pending"  | string>()
   const dispatch = useDispatch()
   const router = useRouter()
-    const query = {
+    
+  const query = {
         category : category, 
-        title : title
+        title : title ,
+        completed : completed  ,
     }
-  const {data : sharedTasks , isLoading : sharedTasksLoading , isFetching} = useGetSharedTasksQuery(query)
+
+  const {data : sharedTasks , isLoading : sharedTasksLoading , isFetching , refetch} = useGetSharedTasksQuery(query)
        
+
+    useEffect(() => {
+      refetch()
+    },[userData?.user?.accessToken])
+
   // @ts-ignore
        if(sharedTasks?.status  == 401) {
         logOut(dispatch)
         router.replace("/")
       }
+    const handleCompletedChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setCompleted(event.target.value );
+    };
 
     if(sharedTasksLoading) return <Spinner></Spinner>
   
-    if ((!sharedTasks || sharedTasks.length === 0) && !(category || title)) {
+    if ((!sharedTasks || sharedTasks.length === 0) && !(category || title || completed)) {
       return (
         <div className="text-center text-xl text-gray-700 py-10">
           <p>No tasks Shared with you yet .</p>
@@ -53,6 +66,16 @@ function SharedTasks() {
         className="p-2 border border-gray-300 rounded-md w-full"
       />
     </div>
+      <Select
+          value={completed}
+          onChange={handleCompletedChange}
+          className="max-w-xs"
+          label="Filter by completed state"
+      >
+          <SelectItem textValue="" key="">All</SelectItem>
+          <SelectItem textValue="completed" key="completed">completed</SelectItem>
+          <SelectItem textValue="pending" key="pending">pending</SelectItem>
+      </Select>
     <div className="text-center mb-5">
       {isFetching && <Spinner className="mx-auto" />}
     </div>

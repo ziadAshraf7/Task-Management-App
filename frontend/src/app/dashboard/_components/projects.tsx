@@ -53,15 +53,9 @@ function Projects() {
     </div>
     </>)
   return (
-    <section className='w-full' id='projects'>
+    <section id='projects'>
       <h2 className='text-2xl mb-5 font-semibold text-neutral-800'>Projects</h2>
-      <div  className="w-[800px] overflow-x-scroll">
-      <Table  
-      aria-label="Task details table"
-      classNames={{
-        base: "w-full", 
-      }}
-      >
+      <Table className='w-full' aria-label="Task details table">
         <TableHeader>
           <TableColumn>TASK TITLE</TableColumn>
           <TableColumn>CREATED BY</TableColumn>
@@ -70,7 +64,7 @@ function Projects() {
           <TableColumn>DUEDATE</TableColumn>
         </TableHeader>
         <TableBody>
-              {tasks?.slice(0,5).map((task : Task) => {
+              {tasks?.slice(0,8).map((task : Task) => {
                 return <TableRow key={task._id}>
                 <TableCell>{ task.title}</TableCell>
                 <TableCell>
@@ -92,7 +86,6 @@ function Projects() {
               })}
         </TableBody>
     </Table>
-    </div>
     </section>
   )
 }

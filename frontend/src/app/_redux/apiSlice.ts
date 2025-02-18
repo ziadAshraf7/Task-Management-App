@@ -1,4 +1,3 @@
-// apiSlice.js
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import Cookies from "js-cookie";
 import { extractUserData } from '../_utills/utills';
@@ -43,7 +42,7 @@ export const apiSlice = createApi({
     }),
 
     getCreatedTasks: builder.query({
-      query: (searchParams : {category : string , title : string} | undefined) => ({
+      query: (searchParams : any) => ({
         url: '/tasks',
         params: searchParams, 
       }),
@@ -60,7 +59,7 @@ export const apiSlice = createApi({
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: ['CreatedTasks'], 
+      invalidatesTags: ['CreatedTasks' , 'AssignedTasks' , 'SharedTasks'], 
     }),
 
     deleteTask: builder.mutation({
@@ -68,7 +67,7 @@ export const apiSlice = createApi({
         url: '/task-management/' + taskId,
         method: 'DELETE',
       }),
-      invalidatesTags: ['CreatedTasks' , 'AssignedTasks'], 
+      invalidatesTags: ['CreatedTasks' , 'AssignedTasks' , 'SharedTasks'], 
     }),
 
     addTask: builder.mutation({
@@ -136,3 +135,5 @@ export const {
   useDeleteTaskMutation ,
   useUnAssignTaskMutation
 } = apiSlice;
+
+export const {util} = apiSlice;

@@ -1,13 +1,13 @@
 
+import { util } from "@/app/_redux/apiSlice";
 import { updateUserInfo } from "@/app/_redux/userSlice";
-import { userCookieData } from "@/app/_types/types";
+import { AppDispatch } from "@/app/_types/types";
 import Cookies from "js-cookie";
-import { Dispatch } from "react";
 
 
-export const logOut = (dispatch : Dispatch<{ payload: userCookieData | undefined; type: "user/updateUserInfo" }>) => {
+export const logOut = (dispatch : AppDispatch) => {
     Cookies.remove('user')
     dispatch(updateUserInfo(undefined));  
-
+    dispatch(util.resetApiState());
 }
 

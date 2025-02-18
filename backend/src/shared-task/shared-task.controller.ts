@@ -3,6 +3,7 @@ import { AuthGuard } from "src/auth/auth.guard";
 import { SharedTaskService } from "./shared-task.service";
 import { Task } from "src/task/task.schema";
 import { userPayload } from "src/utills/utills";
+import { TaskQueryDto } from "src/dto/taskQuerySearch.dto";
 
 
 
@@ -13,12 +14,20 @@ export class SharedTasksController {
     constructor(private readonly sharedTasksService: SharedTaskService) {}
 
     @Get("")
-    async getSharedTasks(@Request() req: {user : userPayload} , @Query('category') category : string , @Query('title') title : string): Promise<Task[] > {
-        return this.sharedTasksService.findSharedTasks(req.user.userId , category , title)
+    async getSharedTasks(@Request() req: {user : userPayload} , 
+    @Query() taskQueryDto : TaskQueryDto , 
+    ): Promise<Task[] > {
+        return this.sharedTasksService.findSharedTasks(req.user.userId , 
+            taskQueryDto.category , taskQueryDto.title , taskQueryDto.completed)
     }
 
     @Get("assigned")
-    async getAssignedTasks(@Request() req: {user : userPayload} , @Query('category') category : string , @Query('title') title : string): Promise<Task[] > {
-        return this.sharedTasksService.findAssignedTasks(req.user.userId , category , title)
+    async getAssignedTasks(@Request() req: {user : userPayload} , 
+    @Query() taskQueryDto : TaskQueryDto , 
+    ): Promise<Task[] > {
+        return this.sharedTasksService.findAssignedTasks(req.user.userId , 
+            taskQueryDto.category , taskQueryDto.title , taskQueryDto.completed)
     }
+
+
 }
